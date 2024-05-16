@@ -12,13 +12,10 @@ const props = defineProps({
   direction: {
     type: String,
     required: false,
-    default: 'horizontal',
+    default: "horizontal",
   },
   iconSize: {
-    type: [
-      String,
-      Number,
-    ],
+    type: [String, Number],
     required: false,
     default: 52,
   },
@@ -30,26 +27,40 @@ const props = defineProps({
   align: {
     type: String,
     required: false,
-    default: 'center',
+    default: "center",
   },
-})
+});
 
-const emit = defineEmits(['update:currentStep'])
+const emit = defineEmits(["update:currentStep"]);
 
-const currentStep = ref(props.currentStep || 0)
-const activeOrCompletedStepsClasses = computed(() => index => index < currentStep.value ? 'stepper-steps-completed' : index === currentStep.value ? 'stepper-steps-active' : '')
-const isHorizontalAndNotLastStep = computed(() => index => props.direction === 'horizontal' && props.items.length - 1 !== index)
+const currentStep = ref(props.currentStep || 0);
+const activeOrCompletedStepsClasses = computed(
+  () => (index) =>
+    index < currentStep.value
+      ? "stepper-steps-completed"
+      : index === currentStep.value
+      ? "stepper-steps-active"
+      : ""
+);
+const isHorizontalAndNotLastStep = computed(
+  () => (index) =>
+    props.direction === "horizontal" && props.items.length - 1 !== index
+);
 
 // check if validation is enabled
 const isValidationEnabled = computed(() => {
-  return props.isActiveStepValid !== undefined
-})
+  return props.isActiveStepValid !== undefined;
+});
 
 watchEffect(() => {
-  if (props.currentStep !== undefined && props.currentStep < props.items.length && props.currentStep >= 0)
-    currentStep.value = props.currentStep
-  emit('update:currentStep', currentStep.value)
-})
+  if (
+    props.currentStep !== undefined &&
+    props.currentStep < props.items.length &&
+    props.currentStep >= 0
+  )
+    currentStep.value = props.currentStep;
+  emit("update:currentStep", currentStep.value);
+});
 </script>
 
 <template>
@@ -68,34 +79,32 @@ watchEffect(() => {
       <div
         class="cursor-pointer mx-1"
         :class="[
-          (!props.isActiveStepValid && (isValidationEnabled)) && 'stepper-steps-invalid',
+          !props.isActiveStepValid &&
+            isValidationEnabled &&
+            'stepper-steps-invalid',
           activeOrCompletedStepsClasses(index),
         ]"
         @click="!isValidationEnabled && emit('update:currentStep', index)"
       >
         <!-- SECTION stepper step with icon -->
         <template v-if="item.icon">
-          <div class="stepper-icon-step text-high-emphasis d-flex align-center gap-2">
+          <div
+            class="stepper-icon-step text-high-emphasis d-flex align-center gap-2"
+          >
             <!-- 👉 icon and title -->
             <div
               class="d-flex align-center gap-4 step-wrapper"
               :class="[props.direction === 'horizontal' && 'flex-column']"
             >
               <div class="stepper-icon">
-                <VIcon
-                  :icon="item.icon"
-                  :size="item.size || props.iconSize"
-                />
+                <VIcon :icon="item.icon" :size="item.size || props.iconSize" />
               </div>
 
               <div>
                 <p class="stepper-title font-weight-medium mb-0">
                   {{ item.title }}
                 </p>
-                <span
-                  v-if="item.subtitle"
-                  class="stepper-subtitle"
-                >
+                <span v-if="item.subtitle" class="stepper-subtitle">
                   <span class="text-sm">{{ item.subtitle }}</span>
                 </span>
               </div>
@@ -120,7 +129,11 @@ watchEffect(() => {
                 <!-- 👉 custom circle icon -->
                 <template v-if="index >= currentStep">
                   <VBtn
-                    v-if="(!isValidationEnabled || props.isActiveStepValid || index !== currentStep)"
+                    v-if="
+                      !isValidationEnabled ||
+                      props.isActiveStepValid ||
+                      index !== currentStep
+                    "
                     size="40"
                     :variant="index === currentStep ? 'elevated' : 'tonal'"
                     :color="index === currentStep ? 'primary' : 'default'"
@@ -179,10 +192,7 @@ watchEffect(() => {
               v-if="isHorizontalAndNotLastStep(index)"
               class="stepper-step-line"
             >
-              <VIcon
-                icon="tabler-chevron-right"
-                size="24"
-              />
+              <VIcon icon="tabler-chevron-right" size="24" />
             </div>
           </div>
         </template>
@@ -206,7 +216,10 @@ watchEffect(() => {
         align-items: center;
         justify-content: center;
         border-radius: 0.3125rem;
-        background-color: rgba(var(--v-theme-on-surface), var(--v-selected-opacity));
+        background-color: rgba(
+          var(--v-theme-on-surface),
+          var(--v-selected-opacity)
+        );
         block-size: 2.5rem;
         color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
         inline-size: 2.5rem;
@@ -233,7 +246,11 @@ watchEffect(() => {
     .stepper-steps-active {
       .stepper-icon-step {
         .stepper-icon {
-          background-color: linear-gradient(135deg, rgb(135, 38, 56) 0%, rgb(193, 78, 97) 100%) !important;
+          background-color: linear-gradient(
+            135deg,
+            rgb(135, 38, 56) 0%,
+            rgb(193, 78, 97) 100%
+          ) !important;
           color: rgba(var(--v-theme-on-primary));
         }
       }
@@ -296,7 +313,6 @@ watchEffect(() => {
         color: rgb(var(--v-theme-error)) !important;
       }
     }
-
   }
 
   // 👉 stepper alignment

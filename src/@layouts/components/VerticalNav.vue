@@ -1,32 +1,28 @@
 <script setup>
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { VNodeRenderer } from './VNodeRenderer'
-import { layoutConfig } from '@layouts'
+import { PerfectScrollbar } from "vue3-perfect-scrollbar";
+import { VNodeRenderer } from "./VNodeRenderer";
+import { layoutConfig } from "@layouts";
 import {
   VerticalNavGroup,
   VerticalNavLink,
   VerticalNavSectionTitle,
-} from '@layouts/components'
-import { useLayoutConfigStore } from '@layouts/stores/config'
-import { injectionKeyIsVerticalNavHovered } from '@layouts/symbols'
+} from "@layouts/components";
+import { useLayoutConfigStore } from "@layouts/stores/config";
+import { injectionKeyIsVerticalNavHovered } from "@layouts/symbols";
 
-import logosdevDark from '@images/logos/logo.png'
-import logosdevLighk from '@images/logos/logo.png'
-import coliLighk from '@images/logos/Colibri.png'
-import coliDark from '@images/logos/Colibri.png'
+import logosdevDark from "@images/morant/02. NegativoDark.png";
+import logosdevLighk from "@images/morant/01. OriginalLight.png";
+import coliLighk from "@images/morant/Morant-ico_Mesa-de-trabajo-1.png";
+import coliDark from "@images/morant/Morant-ico_Mesa-de-trabajo-1.png";
 
-const imagenlogin = useGenerateImageVariant(logosdevLighk, logosdevDark)
-const imagencoli = useGenerateImageVariant(coliDark, coliLighk)
+const imagenlogin = useGenerateImageVariant(logosdevLighk, logosdevDark);
+const imagencoli = useGenerateImageVariant(coliDark, coliLighk);
 
 const props = defineProps({
   tag: {
-    type: [
-      String,
-      Object,
-      Function,
-    ],
+    type: [String, Object, Function],
     required: false,
-    default: 'aside',
+    default: "aside",
   },
   navItems: {
     type: null,
@@ -40,41 +36,43 @@ const props = defineProps({
     type: Function,
     required: true,
   },
-})
+});
 
-const refNav = ref()
-const isHovered = useElementHover(refNav)
+const refNav = ref();
+const isHovered = useElementHover(refNav);
 
-provide(injectionKeyIsVerticalNavHovered, isHovered)
+provide(injectionKeyIsVerticalNavHovered, isHovered);
 
-const configStore = useLayoutConfigStore()
+const configStore = useLayoutConfigStore();
 
-const resolveNavItemComponent = item => {
-  if ('heading' in item)
-    return VerticalNavSectionTitle
-  if ('children' in item)
-    return VerticalNavGroup
+const resolveNavItemComponent = (item) => {
+  if ("heading" in item) return VerticalNavSectionTitle;
+  if ("children" in item) return VerticalNavGroup;
 
-  return VerticalNavLink
-}
+  return VerticalNavLink;
+};
 
 /*ℹ️ Close overlay side when route is changed
 Close overlay vertical nav when link is clicked
 */
-const route = useRoute()
+const route = useRoute();
 
-watch(() => route.name, () => {
-  props.toggleIsOverlayNavActive(false)
-})
+watch(
+  () => route.name,
+  () => {
+    props.toggleIsOverlayNavActive(false);
+  }
+);
 
-const isVerticalNavScrolled = ref(false)
-const updateIsVerticalNavScrolled = val => isVerticalNavScrolled.value = val
+const isVerticalNavScrolled = ref(false);
+const updateIsVerticalNavScrolled = (val) =>
+  (isVerticalNavScrolled.value = val);
 
-const handleNavScroll = evt => {
-  isVerticalNavScrolled.value = evt.target.scrollTop > 0
-}
+const handleNavScroll = (evt) => {
+  isVerticalNavScrolled.value = evt.target.scrollTop > 0;
+};
 
-const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
+const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered);
 </script>
 
 <template>
@@ -85,9 +83,9 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
     :class="[
       {
         'overlay-nav': configStore.isLessThanOverlayNavBreakpoint,
-        'hovered': isHovered,
-        'visible': isOverlayNavActive,
-        'scrolled': isVerticalNavScrolled,
+        hovered: isHovered,
+        visible: isOverlayNavActive,
+        scrolled: isVerticalNavScrolled,
       },
     ]"
   >
@@ -96,61 +94,64 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
       <slot name="nav-header">
         <RouterLink
           to="/"
-          class="app-logo app-title-wrapper"
+          class="app-logo app-title-wrapper justify-center flex"
         >
           <!-- <VNodeRenderer :nodes="layoutConfig.app.logo" /> -->
-         
+
           <Transition name="vertical-nav-app-title">
-            <h1
-              v-show="hideTitleAndIcon"
-              class="app-logo-title leading-normal"
-            >
+            <h1 v-show="hideTitleAndIcon" class="app-logo-title leading-normal">
               <VImg
-              width="30"
-              max-width="30"
-              :src="imagencoli"
-              class="auth-illustration mt-2 me-5 mb-2"
-            />
+                width="30"
+                max-width="30"
+                :src="imagencoli"
+                class="auth-illustration mt-2 me-5 mb-2"
+              />
             </h1>
           </Transition>
-          <Transition name="vertical-nav-app-title">
+          <Transition name="vertical-nav-app-title mx-auto">
             <h1
               v-show="!hideTitleAndIcon"
               class="app-logo-title leading-normal"
             >
-            <VImg
-              width="150"
-              max-width="605"
-              :src="imagenlogin"
-              class="auth-illustration mt-2 me-5 mb-2"
-            />
+              <VImg
+                width="80"
+                max-width="605"
+                :src="imagenlogin"
+                class="auth-illustration my-2 mx-10"
+              />
             </h1>
           </Transition>
         </RouterLink>
 
         <!-- 👉 Vertical nav actions -->
         <!-- Show toggle collapsible in >md and close button in <md -->
-          
-          <!-- Cuando el BOTON esta sin picar unpinned -->
-          <Component 
+
+        <!-- Cuando el BOTON esta sin picar unpinned -->
+        <Component
           :is="layoutConfig.app.iconRenderer || 'div'"
           v-show="configStore.isVerticalNavCollapsed"
           class="header-action d-none nav-unpin"
           :class="configStore.isVerticalNavCollapsed && 'd-lg-block'"
           v-bind="layoutConfig.icons.verticalNavUnPinned"
-          @click="configStore.isVerticalNavCollapsed = !configStore.isVerticalNavCollapsed"
+          @click="
+            configStore.isVerticalNavCollapsed =
+              !configStore.isVerticalNavCollapsed
+          "
         />
-          
-          <!-- Cuando el BOTON esta picado pinned-->
-          <Component
-            :is="layoutConfig.app.iconRenderer || 'div'"
-            v-show="!configStore.isVerticalNavCollapsed"
-            class="header-action d-none nav-pin"
-            :class="!configStore.isVerticalNavCollapsed && 'd-lg-block'"
-            v-bind="layoutConfig.icons.verticalNavPinned"
-            @click="configStore.isVerticalNavCollapsed = !configStore.isVerticalNavCollapsed"
+
+        <!-- Cuando el BOTON esta picado pinned-->
+        <Component
+          :is="layoutConfig.app.iconRenderer || 'div'"
+          v-show="!configStore.isVerticalNavCollapsed"
+          class="header-action d-none nav-pin"
+          :class="!configStore.isVerticalNavCollapsed && 'd-lg-block'"
+          v-bind="layoutConfig.icons.verticalNavPinned"
+          @click="
+            configStore.isVerticalNavCollapsed =
+              !configStore.isVerticalNavCollapsed
+          "
         />
-          
+
         <Component
           :is="layoutConfig.app.iconRenderer || 'div'"
           class="header-action d-lg-none"
@@ -264,7 +265,7 @@ const hideTitleAndIcon = configStore.isVerticalNavMini(isHovered)
 }
 
 // Small screen vertical nav transition
-@media (max-width:1279px) {
+@media (max-width: 1279px) {
   .layout-vertical-nav {
     &:not(.visible) {
       transform: translateX(-#{variables.$layout-vertical-nav-width});

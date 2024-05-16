@@ -144,7 +144,7 @@
 @each $color-name in variables.$theme-colors-name {
   .v-tabs.v-tabs-pill {
     .v-slide-group-item--active.v-tab--selected.text-#{$color-name} {
-      background: linear-gradient(135deg, rgb(135, 38, 56) 0%, rgb(193, 78, 97) 100%) !important;
+      background: linear-gradient(90deg, #8A8A8A, #d9d9d9) !important;
       color: rgb(var(--v-theme-on-#{$color-name})) !important;
     }
   }
