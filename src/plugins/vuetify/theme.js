@@ -1,4 +1,4 @@
-export const staticPrimaryColor = '#8e3040'
+export const staticPrimaryColor = '#8A8A8A'
 export const themes = {
   light: {
     dark: false,
@@ -33,7 +33,8 @@ export const themes = {
       'cafe' : '#b48d57',
       'borderss': '#98969e',
       'azul':'#2666be',
-      'morado':'#7367f0'
+      'morado':'#7367f0',
+      'morver': '#b5437c',
     },
     variables: {
       'code-color': '#d400ff',
@@ -94,7 +95,8 @@ export const themes = {
       'cafe' : '#b48d57',
       'borderss': '#98969e',
       'azul':'#2666be',
-      'morado':'#7367f0'
+      'morado':'#7367f0',
+      'morver': '#bac554',
     },
     variables: {
       'code-color': '#d400ff',
