@@ -61,11 +61,11 @@ export default [
   //     { title: 'Fleet', to: 'apps-logistics-fleet' },
   //   ],
   // },
-  {
-    title: 'Email',
-    icon: { icon: 'tabler-mail' },
-    to: 'apps-email',
-  },
+  // {
+  //   title: 'Email',
+  //   icon: { icon: 'tabler-mail' },
+  //   to: 'apps-email',
+  // },
   // {
   //   title: 'Chat',
   //   icon: { icon: 'tabler-message-circle' },

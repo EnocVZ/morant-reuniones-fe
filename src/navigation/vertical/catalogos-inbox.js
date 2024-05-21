@@ -2,12 +2,12 @@ const menuOption = [
 	//   {
 	// 	 heading: 'Catalogos inbox',
 	//   },
-	{ heading: 'Apps & Pages' },
-	{
-		title: 'Email',
-		icon: { icon: 'tabler-mail' },
-		to: 'apps-email',
-	},
+	// { heading: 'Apps & Pages' },
+	// {
+	// 	title: 'Email',
+	// 	icon: { icon: 'tabler-mail' },
+	// 	to: 'apps-email',
+	// },
 	// {
 	// 	title: 'Reportes',
 	// 	icon:
@@ -16,113 +16,113 @@ const menuOption = [
 	// 	},
 	// 	to: 'apps-email-reportes'
 	// },
-	{
-		title: 'Historia',
-		icon:
-		{
-			icon: 'tabler-history',
-		},
-		to: 'apps-email-historia'
-	},
-	{
-		title: 'Catalogos inbox',
-		icon:
-		{
-			icon: 'tabler-mailbox',
-		},
-		children: [
-			{
-				title: 'Grupos recibir',
-				to: 'catalogos-inbox-grupos',
-				icon: {
-					icon: 'tabler-users-group',
-					style: {
-						width: '22px',
-						height: '22px',
-					},
-				},
-			},
-			{
-				title: 'Grupos enviar',
-				to: 'catalogos-inbox-grupos-enviar',
-				icon: {
-					icon: 'tabler-users-group',
-					style: {
-						width: '22px',
-						height: '22px',
-					},
-				}
-			},
-			{
-				title: 'Tipos acontecimientos',
-				to: 'catalogos-inbox-tipo-acontecimiento',
-				icon: {
-					icon: 'tabler-timeline-event-text',
-					style: {
-						width: '22px',
-						height: '22px',
-					},
-				},
-			},
-			{
-				title: "Estados acontecimientos",
-				to: "catalogos-inbox-estados-acontecimientos",
-				icon: {
-					icon: 'tabler-category',
-					style: {
-						width: '22px',
-						height: '22px',
-					},
-				}
-			},
-			{
-				title: "Temas",
-				to: "catalogos-inbox-temas",
-				icon: {
-					icon: "tabler-category",
-					style: {
-						width: '22px',
-						height: '22px',
-					}
-				}
-			},
-			{
-				title: 'Informantes',
-				to: 'catalogos-inbox-informantes',
-				icon: {
-					icon: 'tabler-user-up',
-					style: {
-						width: '22px',
-						height: '22px',
-					},
-				},
-			},
-			{
-				title: 'Palabras vinculadas',
-				to: 'catalogos-inbox-palabras-vinculadas',
-				icon: {
-					icon: 'tabler-list-search',
-					style: {
-						width: '22px',
-						height: '22px',
-					},
-				},
+	// {
+	// 	title: 'Historia',
+	// 	icon:
+	// 	{
+	// 		icon: 'tabler-history',
+	// 	},
+	// 	to: 'apps-email-historia'
+	// },
+	// {
+	// 	title: 'Catalogos inbox',
+	// 	icon:
+	// 	{
+	// 		icon: 'tabler-mailbox',
+	// 	},
+	// 	children: [
+	// 		{
+	// 			title: 'Grupos recibir',
+	// 			to: 'catalogos-inbox-grupos',
+	// 			icon: {
+	// 				icon: 'tabler-users-group',
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				},
+	// 			},
+	// 		},
+	// 		{
+	// 			title: 'Grupos enviar',
+	// 			to: 'catalogos-inbox-grupos-enviar',
+	// 			icon: {
+	// 				icon: 'tabler-users-group',
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				},
+	// 			}
+	// 		},
+	// 		{
+	// 			title: 'Tipos acontecimientos',
+	// 			to: 'catalogos-inbox-tipo-acontecimiento',
+	// 			icon: {
+	// 				icon: 'tabler-timeline-event-text',
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				},
+	// 			},
+	// 		},
+	// 		{
+	// 			title: "Estados acontecimientos",
+	// 			to: "catalogos-inbox-estados-acontecimientos",
+	// 			icon: {
+	// 				icon: 'tabler-category',
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				},
+	// 			}
+	// 		},
+	// 		{
+	// 			title: "Temas",
+	// 			to: "catalogos-inbox-temas",
+	// 			icon: {
+	// 				icon: "tabler-category",
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				}
+	// 			}
+	// 		},
+	// 		{
+	// 			title: 'Informantes',
+	// 			to: 'catalogos-inbox-informantes',
+	// 			icon: {
+	// 				icon: 'tabler-user-up',
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				},
+	// 			},
+	// 		},
+	// 		{
+	// 			title: 'Palabras vinculadas',
+	// 			to: 'catalogos-inbox-palabras-vinculadas',
+	// 			icon: {
+	// 				icon: 'tabler-list-search',
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				},
+	// 			},
 
-			},
-			{
-				title: 'Municipios',
-				to: 'catalogos-inbox-municipios',
-				icon: {
-					icon: 'tabler-building-community',
-					style: {
-						width: '22px',
-						height: '22px',
-					},
-				},
+	// 		},
+	// 		{
+	// 			title: 'Municipios',
+	// 			to: 'catalogos-inbox-municipios',
+	// 			icon: {
+	// 				icon: 'tabler-building-community',
+	// 				style: {
+	// 					width: '22px',
+	// 					height: '22px',
+	// 				},
+	// 			},
 
-			},
-		],
-	},
+	// 		},
+	// 	],
+	// },
 	{
 		title: 'Reuniones',
 		icon: {
