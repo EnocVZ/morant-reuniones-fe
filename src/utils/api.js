@@ -1,7 +1,7 @@
 import { ofetch } from 'ofetch'
 
 export const $api = ofetch.create({
-   baseURL: 'https://localhost:7016/',
+   baseURL: 'https://apimorantadmin.azurewebsites.net/',
   // baseURL: "https://devapiedomex.azurewebsites.net/", //RUTA DE PRUEBAS TABLERO
   // baseURL: 'https://apiedomex.azurewebsites.net/',
   async onRequest({ options }) {

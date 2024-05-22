@@ -3,11 +3,11 @@ import { useCookie } from '@/@core/composable/useCookie'
 import axios from 'axios'
 
 export const $apiService = {
-    urlApi: "https://localhost:7016/",
+    urlApi: "https://apimorantadmin.azurewebsites.net/",
     //urlApi: "https://devapiedomex.azurewebsites.net/", //RUTA DE PRUEBAS TABLERO
     // urlApi: "https://apiedomex.azurewebsites.net/",
     urlApiInbox: "https://informesedomex.azurewebsites.net/",
-    urlAzureBlobStorage: 'https://edomexalm.blob.core.windows.net/',
+    urlAzureBlobStorage: 'https://storemorant.blob.core.windows.net/',
 
     config: {
         headers: {
