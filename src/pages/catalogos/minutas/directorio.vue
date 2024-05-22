@@ -1,30 +1,26 @@
 <script setup>
-const imagenBase = useGenerateImageVariant(imagen2, true)
-
+const imagenBase = useGenerateImageVariant(imagen2, true);
 </script>
 <script>
 import gradoService from "@/services/grado-service";
-import dependenciaService from '@/services/dependencia-service'
-import generoService from '@/services/genero-service'
-import gamaService from '@/services/gama-service'
-import directorioService from '@/services/directorio-service'
+import dependenciaService from "@/services/dependencia-service";
+import generoService from "@/services/genero-service";
+import gamaService from "@/services/gama-service";
+import directorioService from "@/services/directorio-service";
 import municipiosServices from "@/services/inbox/municipios-services";
-import paisesService from '@/services/paises-service'
+import paisesService from "@/services/paises-service";
 import { $apiService } from "@/utils/api-service";
-import { VDataTable } from 'vuetify/labs/VDataTable'
-import { useToast } from 'vue-toastification'
-import 'vue-toastification/dist/index.css'
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
-import imagen2 from '@images/logos/1Recurso 2.png'
-import { requiredValidator } from '@/@core/utils/validators'
-
-
-
+import { VDataTable } from "vuetify/labs/VDataTable";
+import { useToast } from "vue-toastification";
+import "vue-toastification/dist/index.css";
+import { useGenerateImageVariant } from "@core/composable/useGenerateImageVariant";
+import imagen2 from "@images/logos/1Recurso 2.png";
+import { requiredValidator } from "@/@core/utils/validators";
 
 export default {
-  name: 'Directorio',
+  name: "Directorio",
   components: {
-    VDataTable
+    VDataTable,
   },
   data() {
     return {
@@ -36,66 +32,64 @@ export default {
       loading: false,
       headers: [
         // { title: 'Id', key: 'id' },
-        { title: 'Persona', key: 'persona' },
-        { title: 'Cargo', key: 'cargo' },
-        { title: 'Dependencia', key: 'dependencia' },
-        { title: 'Contacto', key: 'numContacto' },
-        { title: 'Lada', key: 'Lada' },
-        { title: 'Genero', key: 'genero' },
-        { title: 'Gama', key: 'gama' },
-        { title: 'Imagen', key: 'imagen' },
-        { title: 'ImageFile', key: 'ImagenFile' },
+        { title: "Persona", key: "persona" },
+        { title: "Cargo", key: "cargo" },
+        { title: "Dependencia", key: "dependencia" },
+        { title: "Contacto", key: "numContacto" },
+        { title: "Lada", key: "Lada" },
+        { title: "Genero", key: "genero" },
+        { title: "Gama", key: "gama" },
+        { title: "Imagen", key: "imagen" },
+        { title: "ImageFile", key: "ImagenFile" },
         { title: "Acciones", key: "actions" },
       ],
       directorios: [],
       directorioDefault: {
         id: 0,
-        persona: '',
-        nombres: '',
-        apPaterno: '',
-        apMaterno: '',
+        persona: "",
+        nombres: "",
+        apPaterno: "",
+        apMaterno: "",
         cargo: null,
-        correoElectronico: '',
+        correoElectronico: "",
         comunidad: null,
         municipio: null,
         procedencia: null,
         idTipoDirectorio: null,
         idGrado: null,
-        cargo: '',
+        cargo: "",
         idDependencia: null,
-        numContacto: '',
-        Lada: '+52',
+        numContacto: "",
+        Lada: "+52",
         idGenero: null,
         idGama: null,
-        imagen: '',
+        imagen: "",
         ImagenFile: null,
       },
-      directorioEditar: {
-
-      },
+      directorioEditar: {},
       directorioGuardar: {
         id: 0,
-        persona: '',
-        nombres: '',
-        apPaterno: '',
-        apMaterno: '',
+        persona: "",
+        nombres: "",
+        apPaterno: "",
+        apMaterno: "",
         cargo: null,
-        correoElectronico: '',
+        correoElectronico: "",
         comunidad: null,
         municipio: null,
         procedencia: null,
         idTipoDirectorio: null,
         idGrado: null,
-        cargo: '',
+        cargo: "",
         idDependencia: null,
-        numContacto: '',
-        Lada: '+52',
+        numContacto: "",
+        Lada: "+52",
         idGenero: null,
         idGama: null,
-        imagen: '',
+        imagen: "",
         ImagenFile: null,
       },
-      refFrom: '',
+      refFrom: "",
       grado: [],
       tipoDirectorio: [],
       dependencias: [],
@@ -103,34 +97,32 @@ export default {
       idDirectorioEliminar: 0,
       open: false,
       openEliminar: false,
-      imagenMiniatura: '',
+      imagenMiniatura: "",
       paises: [],
       totalConsultas: 0,
-      StorageEdomexURL: '',
+      StorageEdomexURL: "",
       Municipios: [],
       DependenciasSematizar: [],
-    }
+    };
   },
-  computed: {
-
-  },
+  computed: {},
   watch: {
     "DependenciasSematizar.id": function (newVal, oldVal) {
-      if (this.DependenciasSematizar.id != 0 && this.DependenciasSematizar.id != undefined ) {
+      if (
+        this.DependenciasSematizar.id != 0 &&
+        this.DependenciasSematizar.id != undefined
+      ) {
         if (newVal !== oldVal) {
-
           this.page = 1;
           this.itemsPerPage = 8;
           this.ListarDirectoriosV2idDependencia();
         }
       } else {
-
         this.page = 1;
         this.itemsPerPage = 8;
         this.hasMoreItems = true;
         this.ListarDirectoriosV2();
       }
-
     },
   },
 
@@ -139,64 +131,119 @@ export default {
       // Clona el array original para evitar mutaciones no deseadas4
       this.DependenciasSematizar = [...this.dependencias];
       // Agrega la opción "Todos" al inicio de la lista
-      this.DependenciasSematizar.unshift({ id: 0, nombre: 'Todos' });
-
+      this.DependenciasSematizar.unshift({ id: 0, nombre: "Todos" });
     },
     async getMunicipios() {
       var res = await municipiosServices.Municipios().then((data) => data.data);
       this.Municipios = res;
     },
     async guardarDirectorio() {
-
-      if (this.directorioGuardar.Lada == '') {
-        this.directorioGuardar.Lada = '+52';
+      if (this.directorioGuardar.Lada == "") {
+        this.directorioGuardar.Lada = "+52";
       }
-      if(this.directorioGuardar.numContacto == ""){
-        this.directorioGuardar.Lada = '';
+      if (this.directorioGuardar.numContacto == "") {
+        this.directorioGuardar.Lada = "";
       }
-      if (/*this.validarDirectorio() &&*/ this.validarFormatoNumero(this.directorioGuardar.numContacto)) {
+      if (
+        /*this.validarDirectorio() &&*/ this.validarFormatoNumero(
+          this.directorioGuardar.numContacto
+        )
+      ) {
         try {
           if (this.directorioGuardar.id === 0) {
             const nombrePersona = this.directorioGuardar.persona.trim();
 
-            const personaRepetida = this.directorios.some(directorio => directorio.persona.trim().toLowerCase() === nombrePersona.toLowerCase());
+            const personaRepetida = this.directorios.some(
+              (directorio) =>
+                directorio.persona.trim().toLowerCase() ===
+                nombrePersona.toLowerCase()
+            );
 
             if (personaRepetida) {
-              this.toast.error('Ya existe una persona con este nombre en el directorio', {
-                position: 'top-right',
-                timeout: 3000,
-                closeOnClick: true,
-              });
+              this.toast.error(
+                "Ya existe una persona con este nombre en el directorio",
+                {
+                  position: "top-right",
+                  timeout: 3000,
+                  closeOnClick: true,
+                }
+              );
             } else {
               let formData = new FormData();
-              let gradoAbreviado = '';
+              let gradoAbreviado = "";
               for (const tipoDirectorio of this.grado) {
                 if (this.directorioGuardar.idGrado === tipoDirectorio.id) {
                   gradoAbreviado = tipoDirectorio.abreviatura;
                   break;
                 }
               }
-              formData.append('persona', `${gradoAbreviado}. ${this.directorioGuardar.nombres} ${this.directorioGuardar.apPaterno} ${this.directorioGuardar.apMaterno}`);
-              formData.append('nombres', this.directorioGuardar.nombres);
-              formData.append('apPaterno', this.directorioGuardar.apPaterno);
-              formData.append('apMaterno', this.directorioGuardar.apMaterno ? this.directorioGuardar.apMaterno : '');
-              formData.append('cargo', this.directorioGuardar.cargo ? this.directorioGuardar.cargo : this.directorioGuardar.cargo = '');
-              formData.append('comunidad', this.directorioGuardar.comunidad ? this.directorioGuardar.comunidad : '');
-              formData.append('municipio', this.directorioGuardar.municipio ? this.directorioGuardar.municipio : '');
+              formData.append(
+                "persona",
+                `${gradoAbreviado}. ${this.directorioGuardar.nombres} ${this.directorioGuardar.apPaterno} ${this.directorioGuardar.apMaterno}`
+              );
+              formData.append("nombres", this.directorioGuardar.nombres);
+              formData.append("apPaterno", this.directorioGuardar.apPaterno);
+              formData.append(
+                "apMaterno",
+                this.directorioGuardar.apMaterno
+                  ? this.directorioGuardar.apMaterno
+                  : ""
+              );
+              formData.append(
+                "cargo",
+                this.directorioGuardar.cargo
+                  ? this.directorioGuardar.cargo
+                  : (this.directorioGuardar.cargo = "")
+              );
+              formData.append(
+                "comunidad",
+                this.directorioGuardar.comunidad
+                  ? this.directorioGuardar.comunidad
+                  : ""
+              );
+              formData.append(
+                "municipio",
+                this.directorioGuardar.municipio
+                  ? this.directorioGuardar.municipio
+                  : ""
+              );
               // formData.append('procedencia', this.directorioGuardar.procedencia ? this.directorioGuardar.procedencia : '');
-              formData.append('correoElectronico', this.directorioGuardar.correoElectronico ? this.directorioGuardar.correoElectronico : '');
-              formData.append('idGrado', this.directorioGuardar.idGrado);
-              formData.append('idTipoDirectorio', this.directorioGuardar.idTipoDirectorio);
-              formData.append('idDependencia', this.directorioGuardar.idDependencia != null ? this.directorioGuardar.idDependencia : this.directorioGuardar.idDependencia = '');
-              formData.append('numContacto', `${this.directorioGuardar.Lada}${this.directorioGuardar.numContacto}`);
-              formData.append('idGenero', this.directorioGuardar.idGenero);
-              formData.append('idGama', this.directorioGuardar.idGama);
-              formData.append('ImagenFile', this.directorioGuardar.ImagenFile);
-              formData.append('Imagen', this.directorioGuardar.imagen != null ? this.directorioGuardar.imagen : '');
+              formData.append(
+                "correoElectronico",
+                this.directorioGuardar.correoElectronico
+                  ? this.directorioGuardar.correoElectronico
+                  : ""
+              );
+              formData.append("idGrado", this.directorioGuardar.idGrado);
+              formData.append(
+                "idTipoDirectorio",
+                this.directorioGuardar.idTipoDirectorio
+              );
+              formData.append(
+                "idDependencia",
+                this.directorioGuardar.idDependencia != null
+                  ? this.directorioGuardar.idDependencia
+                  : (this.directorioGuardar.idDependencia = "")
+              );
+              formData.append(
+                "numContacto",
+                `${this.directorioGuardar.Lada}${this.directorioGuardar.numContacto}`
+              );
+              formData.append("idGenero", this.directorioGuardar.idGenero);
+              formData.append("idGama", this.directorioGuardar.idGama);
+              formData.append("ImagenFile", this.directorioGuardar.ImagenFile);
+              formData.append(
+                "Imagen",
+                this.directorioGuardar.imagen != null
+                  ? this.directorioGuardar.imagen
+                  : ""
+              );
 
               let result = await directorioService.agregarDirectorio(formData);
               if (result.data.success) {
-                this.toast.success("registro agregado al directorio correctamente");
+                this.toast.success(
+                  "registro agregado al directorio correctamente"
+                );
                 this.open = false;
                 if (this.DependenciasSematizar.id > 0) {
                   await this.ListarDirectoriosV2idDependencia(1);
@@ -208,67 +255,111 @@ export default {
               }
 
               // Agregar Directorio
-
-
-
             }
-          } else { // Si se está actualizando un directorio existente
+          } else {
+            // Si se está actualizando un directorio existente
             // Actualizar Directorio
             let formData = new FormData();
-            let gradoAbreviado = '';
+            let gradoAbreviado = "";
 
             for (const tipoDirectorio of this.grado) {
-
               if (this.directorioGuardar.idGrado === tipoDirectorio.id) {
                 gradoAbreviado = tipoDirectorio.abreviatura;
                 break;
               }
             }
 
-            formData.append('id', this.directorioGuardar.id);
-            formData.append('persona', `${gradoAbreviado}. ${this.directorioGuardar.nombres} ${this.directorioGuardar.apPaterno} ${this.directorioGuardar.apMaterno}`);
-            formData.append('nombres', this.directorioGuardar.nombres);
-            formData.append('apPaterno', this.directorioGuardar.apPaterno);
-            formData.append('apMaterno', this.directorioGuardar.apMaterno ? this.directorioGuardar.apMaterno : '');
-            formData.append('cargo', this.directorioGuardar.cargo ? this.directorioGuardar.cargo : '');
+            formData.append("id", this.directorioGuardar.id);
+            formData.append(
+              "persona",
+              `${gradoAbreviado}. ${this.directorioGuardar.nombres} ${this.directorioGuardar.apPaterno} ${this.directorioGuardar.apMaterno}`
+            );
+            formData.append("nombres", this.directorioGuardar.nombres);
+            formData.append("apPaterno", this.directorioGuardar.apPaterno);
+            formData.append(
+              "apMaterno",
+              this.directorioGuardar.apMaterno
+                ? this.directorioGuardar.apMaterno
+                : ""
+            );
+            formData.append(
+              "cargo",
+              this.directorioGuardar.cargo ? this.directorioGuardar.cargo : ""
+            );
 
-            formData.append('comunidad', this.directorioGuardar.comunidad ? this.directorioGuardar.comunidad : '');
+            formData.append(
+              "comunidad",
+              this.directorioGuardar.comunidad
+                ? this.directorioGuardar.comunidad
+                : ""
+            );
 
-            formData.append('municipio', this.directorioGuardar.municipio ? this.directorioGuardar.municipio : '');
+            formData.append(
+              "municipio",
+              this.directorioGuardar.municipio
+                ? this.directorioGuardar.municipio
+                : ""
+            );
 
-            formData.append('procedencia', this.directorioGuardar.procedencia ? this.directorioGuardar.procedencia : '');
+            formData.append(
+              "procedencia",
+              this.directorioGuardar.procedencia
+                ? this.directorioGuardar.procedencia
+                : ""
+            );
 
-            formData.append('correoElectronico', this.directorioGuardar.correoElectronico ? this.directorioGuardar.correoElectronico : '');
-            formData.append('idGrado', this.directorioGuardar.idGrado);
-            formData.append('idTipoDirectorio', this.directorioGuardar.idTipoDirectorio);
-            formData.append('idDependencia', this.directorioGuardar.idDependencia != null ? this.directorioGuardar.idDependencia : this.directorioGuardar.idDependencia = '');
+            formData.append(
+              "correoElectronico",
+              this.directorioGuardar.correoElectronico
+                ? this.directorioGuardar.correoElectronico
+                : ""
+            );
+            formData.append("idGrado", this.directorioGuardar.idGrado);
+            formData.append(
+              "idTipoDirectorio",
+              this.directorioGuardar.idTipoDirectorio
+            );
+            formData.append(
+              "idDependencia",
+              this.directorioGuardar.idDependencia != null
+                ? this.directorioGuardar.idDependencia
+                : (this.directorioGuardar.idDependencia = "")
+            );
 
-            formData.append('numContacto', `${this.directorioGuardar.Lada}${this.directorioGuardar.numContacto}`);
-            formData.append('idGenero', this.directorioGuardar.idGenero);
-            formData.append('idGama', this.directorioGuardar.idGama);
-            formData.append('ImagenFile', this.directorioGuardar.ImagenFile);
-            formData.append('Imagen', this.directorioGuardar.imagen != null ? this.directorioGuardar.imagen : '');
+            formData.append(
+              "numContacto",
+              `${this.directorioGuardar.Lada}${this.directorioGuardar.numContacto}`
+            );
+            formData.append("idGenero", this.directorioGuardar.idGenero);
+            formData.append("idGama", this.directorioGuardar.idGama);
+            formData.append("ImagenFile", this.directorioGuardar.ImagenFile);
+            formData.append(
+              "Imagen",
+              this.directorioGuardar.imagen != null
+                ? this.directorioGuardar.imagen
+                : ""
+            );
             let result = await directorioService.actualizarDirectorio(formData);
 
             if (result.data.success) {
-              this.toast.success('El registro ha sido actualizado correctamente');
+              this.toast.success(
+                "El registro ha sido actualizado correctamente"
+              );
               this.open = false;
               if (this.DependenciasSematizar.id > 0) {
                 await this.ListarDirectoriosV2idDependencia(1);
               } else {
                 await this.ListarDirectoriosV2(1);
               }
-
             } else {
               console.error(result);
             }
           }
         } catch (error) {
-          console.error('Error al guardar directorio:', error);
+          console.error("Error al guardar directorio:", error);
         }
       }
     },
-
 
     /*validarDirectorio() {
         let valido = true;
@@ -304,89 +395,89 @@ export default {
           page: this.page,
           take: this.itemsPerPage,
         };
-        let result = await directorioService.listarDirectorioV2(payload)
+        let result = await directorioService
+          .listarDirectorioV2(payload)
           .then((res) => {
-            this.directorios = this.page == 1 ? res.data : [...this.directorios, ...res.data];
+            this.directorios =
+              this.page == 1 ? res.data : [...this.directorios, ...res.data];
 
             this.totalConsultas = res.total;
             this.hasMoreItems = res.total > this.page * this.itemsPerPage;
             this.loading = false;
-
-          }).catch((err) => {
+          })
+          .catch((err) => {
             console.log(err);
             this.loading = false;
-          })
+          });
       }
     },
     async ListarDirectoriosV2idDependencia(page) {
-
       this.loading = true;
       if (this.hasMoreItems) {
-
         this.page = page ? page : this.page;
 
         let payload = {
           buscar: "",
           page: this.page,
           take: this.itemsPerPage,
-          idDependencia: this.DependenciasSematizar.id
+          idDependencia: this.DependenciasSematizar.id,
         };
-        let result = await directorioService.listarDirectorioV2idDependencia(payload)
+        let result = await directorioService
+          .listarDirectorioV2idDependencia(payload)
           .then((res) => {
-
-            this.directorios = this.page == 1 ? res.data : [...this.directorios, ...res.data];
+            this.directorios =
+              this.page == 1 ? res.data : [...this.directorios, ...res.data];
 
             this.totalConsultas = res.total;
             this.hasMoreItems = res.total > this.page * this.itemsPerPage;
-            this.loading = false;
-
-          }).catch((err) => {
-
             this.loading = false;
           })
+          .catch((err) => {
+            this.loading = false;
+          });
       } else if (this.DependenciasSematizar.id > 0) {
-
         this.page = page ? page : this.page;
 
         let payload = {
           buscar: "",
           page: this.page,
           take: this.itemsPerPage,
-          idDependencia: this.DependenciasSematizar.id
+          idDependencia: this.DependenciasSematizar.id,
         };
-        let result = await directorioService.listarDirectorioV2idDependencia(payload)
+        let result = await directorioService
+          .listarDirectorioV2idDependencia(payload)
           .then((res) => {
-
-            this.directorios = this.page == 1 ? res.data : [...this.directorios, ...res.data];
+            this.directorios =
+              this.page == 1 ? res.data : [...this.directorios, ...res.data];
 
             this.totalConsultas = res.total;
             this.hasMoreItems = res.total > this.page * this.itemsPerPage;
             this.loading = false;
-
-          }).catch((err) => {
+          })
+          .catch((err) => {
             console.log(err);
             this.loading = false;
-          })
+          });
       }
-
-
     },
 
     async masDatos() {
-      this.page++
+      this.page++;
       if (this.DependenciasSematizar.id > 0) {
         await this.ListarDirectoriosV2idDependencia();
       } else {
         await this.ListarDirectoriosV2();
       }
-
     },
 
     async scrolling({ target }) {
       const { scrollingElement } = target;
       const gap = 10;
-      if (scrollingElement.scrollTop + scrollingElement.clientHeight + gap >= scrollingElement.scrollHeight) {
-        $('#btn-mas').click();
+      if (
+        scrollingElement.scrollTop + scrollingElement.clientHeight + gap >=
+        scrollingElement.scrollHeight
+      ) {
+        $("#btn-mas").click();
       }
     },
     /*async verificarDatos() {
@@ -399,14 +490,14 @@ export default {
         }
     },*/
     OpenEliminar(id) {
-      this.idDirectorioEliminar = id,
-        this.openEliminar = true
-
+      (this.idDirectorioEliminar = id), (this.openEliminar = true);
     },
     async EliminarDirectorio() {
-      let result = await directorioService.eliminarDirectorio(this.idDirectorioEliminar);
+      let result = await directorioService.eliminarDirectorio(
+        this.idDirectorioEliminar
+      );
       if (result.data.success) {
-        this.toast.success("El registro ha sido eliminado correctamente")
+        this.toast.success("El registro ha sido eliminado correctamente");
         this.cerrarEliminar();
         if (this.DependenciasSematizar.id > 0) {
           await this.ListarDirectoriosV2idDependencia(1);
@@ -414,92 +505,92 @@ export default {
           await this.ListarDirectoriosV2(1);
         }
       } else {
-        this.toast.success("Error")
+        this.toast.success("Error");
       }
-
     },
 
     openAgregar() {
-      console.log(this.directorioDefault)
-      console.log(this.directorioGuardar)
-      this.directorioGuardar = { ...this.directorioDefault }
-      this.open = true
-
-
+      console.log(this.directorioDefault);
+      console.log(this.directorioGuardar);
+      this.directorioGuardar = { ...this.directorioDefault };
+      this.open = true;
     },
     async OpenEditar(Id) {
       this.directorioGuardar = { ...Id };
-      this.open = true
+      this.open = true;
       if (this.directorioGuardar.imagen != null) {
-        await directorioService.obtenerImagenUrl(this.directorioGuardar.imagen, Date.now()).then((value) => {
-          this.imagenMiniatura = value
-          // console.log(this.imagenMiniatura);
-        });
+        await directorioService
+          .obtenerImagenUrl(this.directorioGuardar.imagen, Date.now())
+          .then((value) => {
+            this.imagenMiniatura = value;
+            // console.log(this.imagenMiniatura);
+          });
       }
       if (this.directorioGuardar.numContacto.length > 10) {
-        this.directorioGuardar.Lada = this.directorioGuardar.numContacto.slice(this.directorioGuardar.length, -10);
-        this.directorioGuardar.numContacto = this.directorioGuardar.numContacto.slice(-10);
-      }
-      else {
+        this.directorioGuardar.Lada = this.directorioGuardar.numContacto.slice(
+          this.directorioGuardar.length,
+          -10
+        );
+        this.directorioGuardar.numContacto =
+          this.directorioGuardar.numContacto.slice(-10);
+      } else {
         this.directorioGuardar.Lada = "+52";
       }
       // console.log(this.directorioGuardar);
-
     },
     cerrarEliminar() {
-      this.idDirectorioEliminar = 0,
-        this.openEliminar = false
+      (this.idDirectorioEliminar = 0), (this.openEliminar = false);
     },
     cerrar() {
-      this.directorioGuardar = { ...this.directorioDefault }
+      this.directorioGuardar = { ...this.directorioDefault };
       this.open = false;
       this.imagenMiniatura = null;
     },
 
     async _ObtenerDependencias() {
       let result = await dependenciaService.obtenerDependencias();
-      if (result.data)
-        this.dependencias = result.data
+      if (result.data) this.dependencias = result.data;
     },
     async _ObtenerGrado() {
       let result = await gradoService.obtenerGradoV1().then((res) => {
         // console.log(res);
         this.grado = res;
       });
-
     },
     async _ObtenerTipoDirectorio() {
-      let result = await directorioService.ObtenerTipoDirectorio().then((res) => {
-        // console.log(res);
-        this.tipoDirectorio = res.data;
-      });
+      let result = await directorioService
+        .ObtenerTipoDirectorio()
+        .then((res) => {
+          // console.log(res);
+          this.tipoDirectorio = res.data;
+        });
     },
     async onSubmit() {
       let res = await this.$refs.refFrom.validate();
       if (res.valid) {
-        this.guardarDirectorio()
+        this.guardarDirectorio();
       }
     },
     async _ObtenerGeneros() {
       let result = await generoService.obtenerGeneros();
-      if (result.data)
-        this.generos = result.data
+      if (result.data) this.generos = result.data;
     },
     async _ObtenerGamas() {
       let result = await gamaService.obtenerGamas();
-      if (result.data)
-        this.gamas = result.data
+      if (result.data) this.gamas = result.data;
     },
     async buscarResultados() {
-      if (this.search.trim() !== '' && this.loading == false) {
+      if (this.search.trim() !== "" && this.loading == false) {
         if (this.DependenciasSematizar.id > 0) {
           let payload = {
             buscar: this.search.trim(),
             page: 1,
             take: this.totalConsultas,
-            idDependencia: this.DependenciasSematizar.id
+            idDependencia: this.DependenciasSematizar.id,
           };
-          let result = await directorioService.listarDirectorioV2idDependencia(payload);
+          let result = await directorioService.listarDirectorioV2idDependencia(
+            payload
+          );
           this.directorios = result.data;
         } else {
           let payload = {
@@ -513,7 +604,6 @@ export default {
         }
         this.loading = false;
         this.hasMoreItems = false;
-
       } else {
         this.hasMoreItems = true;
         if (this.DependenciasSematizar.id > 0) {
@@ -521,7 +611,6 @@ export default {
         } else {
           await this.ListarDirectoriosV2(1);
         }
-
       }
     },
 
@@ -535,9 +624,9 @@ export default {
     validarFormatoNumero(numero) {
       let validar = true;
       if (/^\d{10}$/gi.test(numero) == false) {
-        validar = false
+        validar = false;
       }
-      if(validar == false){
+      if (validar == false) {
         //this.toast.error('Campo de numero incorrecto o vacio');
       }
       return true;
@@ -546,7 +635,7 @@ export default {
       this.directorioGuardar = { ...directorioDefault };
     },
     obtenerImagen(e) {
-      let file = '';
+      let file = "";
       file = e.target.files[0];
       this.directorioGuardar.ImagenFile = file;
       this.cargarImagen(file);
@@ -555,26 +644,27 @@ export default {
       let reader = new FileReader();
       reader.onload = (e) => {
         this.imagenMiniatura = e.target.result;
-      }
+      };
       reader.readAsDataURL(file);
     },
 
     async _ObtenerPaises() {
       let result = await paisesService.obtenerPaises();
-      if (result.data)
-        this.paises = result.data
-    }
+      if (result.data) this.paises = result.data;
+    },
   },
 
   computed: {
     imagen() {
       return this.imagenMiniatura;
-    }
+    },
   },
   async created() {
     // await this.ListarDirectorio();4
-    if (this.DependenciasSematizar.id != 0 && this.DependenciasSematizar.id != undefined) {
-
+    if (
+      this.DependenciasSematizar.id != 0 &&
+      this.DependenciasSematizar.id != undefined
+    ) {
       this.ListarDirectoriosV2idDependencia();
     } else {
       await this.ListarDirectoriosV2();
@@ -592,40 +682,65 @@ export default {
   },
 
   mounted() {
-    window.addEventListener('scroll', this.scrolling);
+    window.addEventListener("scroll", this.scrolling);
   },
 
   unmounted() {
-    window.removeEventListener('scroll', this.scrolling);
+    window.removeEventListener("scroll", this.scrolling);
   },
 
   beforeDestroy() {
-    window.removeEventListener('scroll', this.scrolling);
+    window.removeEventListener("scroll", this.scrolling);
   },
-}
+};
 </script>
 
 <template>
   <div>
-    <a href="" id="btn-mas" style="display: none;" @click.prevent="masDatos()"></a>
+    <a
+      href=""
+      id="btn-mas"
+      style="display: none"
+      @click.prevent="masDatos()"
+    ></a>
 
     <p class="text-2xl mb-6">
       <VIcon icon="tabler-notebook" color="primary" class="me-3" size="30" />
       Directorio
     </p>
     <VRow>
-      <VCol cols="12" md="4">
-        <AppTextField v-model="search" density="compact" placeholder="Buscar..." append-inner-icon="tabler-search"
-          single-line hide-details dense outlined @input="buscarResultados" />
+      <VCol cols="12" md="6">
+        <VRow>
+          <VCol cols="10" md="8" class="my-6">
+            <AppTextField
+              v-model="search"
+              density="compact"
+              placeholder="Buscar..."
+              append-inner-icon="tabler-search"
+              single-line
+              hide-details
+              dense
+              outlined
+              @input="buscarResultados"
+            />
+          </VCol>
+          <VCol cols="2" md="2" class="my-6">
+            <VBtn color="cafe" @click="openAgregar" size="40" rounded="pill">
+              <VIcon class="tabler-plus" size="32" />
+            </VBtn>
+          </VCol>
+        </VRow>
       </VCol>
-      <VCol cols="12" md="8">
-        <VBtn color="cafe" @click="openAgregar" size="40" rounded="pill">
-          <VIcon class="tabler-plus" size="32" />
-        </VBtn>
-      </VCol>
-      <VCol cols="4">
-        <AppSelect v-model="DependenciasSematizar.id" color="#b48d57" label="Dependencia"
-          placeholder="Selecciones la dependencia" :items="DependenciasSematizar" item-title="nombre" item-value="id" />
+      <VCol cols="12" md="6">
+        <AppSelect
+          v-model="DependenciasSematizar.id"
+          color="#b48d57"
+          label="Dependencia"
+          placeholder="Selecciones la dependencia"
+          :items="DependenciasSematizar"
+          item-title="nombre"
+          item-value="id"
+        />
       </VCol>
       <VDivider />
       <VCol cols="12" md="3" v-for="directorio in directorios">
@@ -635,23 +750,39 @@ export default {
               <VRow class="margin_top">
                 <VCol md="12" class="centrarFlex">
                   <div class="image-container">
-                    <VImg class="image-left" :src="`${StorageEdomexURL + directorio.imagen}?${Date.now()}`"
-                      v-if="directorio.imagen" alt="Imagen" width="150" height="150" accept="image/*" />
+                    <VImg
+                      class="image-left"
+                      :src="`${
+                        StorageEdomexURL + directorio.imagen
+                      }?${Date.now()}`"
+                      v-if="directorio.imagen"
+                      alt="Imagen"
+                      width="150"
+                      height="150"
+                      accept="image/*"
+                    />
 
-                    <img class="image-left" v-else src="../../../assets/images/logos/1Recurso 2.png" alt="Imagen"
-                      width="150" height="150" accept="image/*" />
+                    <img
+                      class="image-left"
+                      v-else
+                      src="../../../assets/images/logos/1Recurso 2.png"
+                      alt="Imagen"
+                      width="150"
+                      height="150"
+                      accept="image/*"
+                    />
                   </div>
                   <!-- <VIcon color="primary" size="35" class="tabler-user" /> -->
                 </VCol>
 
-                <hr>
+                <hr />
               </VRow>
               <VRow class="margin_top">
                 <VCol md="12" class="centrarFlex">
-                  <p>{{ directorio.persona }} </p>
+                  <p>{{ directorio.persona }}</p>
                 </VCol>
               </VRow>
-              <hr>
+              <hr />
               <VRow class="margin_top">
                 <VCol md="2">
                   <VIcon color="primary" class="tabler-mail" />
@@ -665,7 +796,7 @@ export default {
               </VRow>
 
               <div v-if="directorio.idTipoDirectorio == 2">
-                <hr>
+                <hr />
                 <VRow class="margin_top">
                   <VCol md="2">
                     <VIcon color="primary" class="tabler-users-group" />
@@ -674,7 +805,7 @@ export default {
                     <p>{{ directorio.comunidad }}</p>
                   </VCol>
                 </VRow>
-                <hr>
+                <hr />
                 <VRow class="margin_top">
                   <VCol md="2">
                     <VIcon color="primary" class="tabler-building" />
@@ -683,7 +814,7 @@ export default {
                     <p>{{ directorio.municipio }}</p>
                   </VCol>
                 </VRow>
-                <hr>
+                <hr />
                 <VRow class="margin_top">
                   <VCol md="2">
                     <VIcon color="primary" class="tabler-armchair" />
@@ -692,10 +823,10 @@ export default {
                     <p>{{ directorio.cargo }}</p>
                   </VCol>
                 </VRow>
-                <hr>
+                <hr />
               </div>
               <div v-if="directorio.idTipoDirectorio == 1">
-                <hr>
+                <hr />
                 <VRow class="margin_top">
                   <VCol md="2">
                     <VIcon color="primary" class="tabler-armchair" />
@@ -704,7 +835,7 @@ export default {
                     <p>{{ directorio.cargo }}</p>
                   </VCol>
                 </VRow>
-                <hr>
+                <hr />
                 <VRow class="margin_top">
                   <VCol md="2">
                     <VIcon color="primary" class="tabler-flag-3" />
@@ -715,7 +846,6 @@ export default {
                 </VRow>
               </div>
 
-
               <VRow class="margin_top">
                 <VCol md="2">
                   <VIcon color="primary" class="tabler-phone" />
@@ -724,7 +854,7 @@ export default {
                   <p>{{ directorio.numContacto }}</p>
                 </VCol>
               </VRow>
-              <hr>
+              <hr />
               <VRow class="margin_top">
                 <VCol md="2">
                   <div v-if="directorio.idGenero == 1">
@@ -738,7 +868,7 @@ export default {
                   <p>{{ directorio.genero }}</p>
                 </VCol>
               </VRow>
-              <hr>
+              <hr />
               <VRow class="margin_top">
                 <VCol md="2">
                   <VIcon color="primary" class="" />
@@ -751,11 +881,21 @@ export default {
             <VRow>
               <VCol md="12">
                 <div class="demo-space-x botones_tarjetas">
-                  <VBtn title="Editar" size="35" color="success" @click="OpenEditar(directorio)">
+                  <VBtn
+                    title="Editar"
+                    size="35"
+                    color="success"
+                    @click="OpenEditar(directorio)"
+                  >
                     <VIcon icon="tabler-edit" size="20" />
                   </VBtn>
-                  <VBtn title="Eliminar" size="35" color="error" class="botonEliminar"
-                    @click="OpenEliminar(directorio.id)">
+                  <VBtn
+                    title="Eliminar"
+                    size="35"
+                    color="error"
+                    class="botonEliminar"
+                    @click="OpenEliminar(directorio.id)"
+                  >
                     <VIcon icon="tabler-trash" size="20" />
                   </VBtn>
                 </div>
@@ -764,7 +904,7 @@ export default {
           </VCardItem>
         </VCard>
       </VCol>
-      <hr>
+      <hr />
 
       <!-- TABLA -->
       <!-- <div>
@@ -788,83 +928,156 @@ export default {
 </VCol>
 </div> -->
       <!-- Fin TABLA -->
-
     </VRow>
 
     <!-- Formulario modal para agregar/editar directorio -->
     <VDialog v-model="open" max-width="650px">
       <VCard>
         <VCardTitle class="pa-6 pb-0">
-          <span class="headline">{{ directorioGuardar.id !== 0 ? 'Editar directorio' : 'Agregar Directorio'
-            }}</span>
+          <span class="headline">{{
+            directorioGuardar.id !== 0
+              ? "Editar directorio"
+              : "Agregar Directorio"
+          }}</span>
         </VCardTitle>
         <VCardText class="pt-0 pb-0">
           <VContainer>
-            <VForm ref="refFrom" @submit.prevent="onSubmit()" enctype="multipart/form-data">
+            <VForm
+              ref="refFrom"
+              @submit.prevent="onSubmit()"
+              enctype="multipart/form-data"
+            >
               <VRow>
                 <VCol cols="12" md="4" class="file-upload-container">
                   <div class="image-container">
-                    <VImg class="image-left" :src="imagen" alt="Imagen" width="150" height="150" v-if="imagen" />
+                    <VImg
+                      class="image-left"
+                      :src="imagen"
+                      alt="Imagen"
+                      width="150"
+                      height="150"
+                      v-if="imagen"
+                    />
 
-                    <img class="image-left" src="../../../assets/images/logos/1Recurso 2.png" alt="Imagen" width="150"
-                      height="150" v-else />
+                    <img
+                      class="image-left"
+                      src="../../../assets/images/logos/1Recurso 2.png"
+                      alt="Imagen"
+                      width="150"
+                      height="150"
+                      v-else
+                    />
 
                     <!-- <VIcon v-else size="100" icon="table-user"></VIcon> -->
                   </div>
                   <label for="fileInput" class="custom-file-button">
                     <VIcon class="tabler-plus" size="32" />
                   </label>
-                  <input type="file" accept="image/*" id="fileInput" ref="fileInput" @change="obtenerImagen"
-                    style="display: none;" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="fileInput"
+                    ref="fileInput"
+                    @change="obtenerImagen"
+                    style="display: none"
+                  />
                 </VCol>
                 <VCol cols="12" md="8">
-
                   <VRow>
                     <VCol cols="12" md="12">
-                      <AppSelect v-model="directorioGuardar.idTipoDirectorio" label="Directorio"
-                        placeholder="Seleccionar Tipo de Directorio" :items="tipoDirectorio" item-title="nombre"
+                      <AppSelect
+                        v-model="directorioGuardar.idTipoDirectorio"
+                        label="Directorio"
+                        placeholder="Seleccionar Tipo de Directorio"
+                        :items="tipoDirectorio"
+                        item-title="nombre"
                         item-value="id"
-                        :rules="[requiredValidator => !!requiredValidator || 'Directorio es requerida']" />
+                        :rules="[
+                          (requiredValidator) =>
+                            !!requiredValidator || 'Directorio es requerida',
+                        ]"
+                      />
                     </VCol>
                     <VCol cols="12" md="12">
-                      <AppSelect v-model="directorioGuardar.idGrado" label="Grado" :items="grado" item-title="nombre"
-                        placeholder="Seleccionar Tipo de Grado" item-value="id"
-                        :rules="[requiredValidator => !!requiredValidator || 'Grado es requerido']" />
+                      <AppSelect
+                        v-model="directorioGuardar.idGrado"
+                        label="Grado"
+                        :items="grado"
+                        item-title="nombre"
+                        placeholder="Seleccionar Tipo de Grado"
+                        item-value="id"
+                        :rules="[
+                          (requiredValidator) =>
+                            !!requiredValidator || 'Grado es requerido',
+                        ]"
+                      />
                     </VCol>
                   </VRow>
-
                 </VCol>
                 <VDivider class="my-3" />
                 <VCol cols="12" md="6">
-                  <VTextField v-model="directorioGuardar.nombres" label="Nombres"
-                    :rules="[requiredValidator => !!requiredValidator || 'Nombres son requeridos']" />
+                  <VTextField
+                    v-model="directorioGuardar.nombres"
+                    label="Nombres"
+                    :rules="[
+                      (requiredValidator) =>
+                        !!requiredValidator || 'Nombres son requeridos',
+                    ]"
+                  />
                 </VCol>
                 <VCol cols="12" md="6">
-                  <VTextField v-model="directorioGuardar.apPaterno" label="Apellido Paterno"
-                    :rules="[requiredValidator => !!requiredValidator || 'Apellido Paterno es requerido']" />
+                  <VTextField
+                    v-model="directorioGuardar.apPaterno"
+                    label="Apellido Paterno"
+                    :rules="[
+                      (requiredValidator) =>
+                        !!requiredValidator || 'Apellido Paterno es requerido',
+                    ]"
+                  />
                 </VCol>
                 <VCol cols="12" md="6">
-                  <VTextField v-model="directorioGuardar.apMaterno" label="Apellido Materno" />
+                  <VTextField
+                    v-model="directorioGuardar.apMaterno"
+                    label="Apellido Materno"
+                  />
                 </VCol>
 
                 <VCol cols="12" md="6">
-                  <VTextField v-model="directorioGuardar.correoElectronico" label="Correo Electrónico" />
+                  <VTextField
+                    v-model="directorioGuardar.correoElectronico"
+                    label="Correo Electrónico"
+                  />
                 </VCol>
 
                 <VCol cols="12" md="12">
                   <VRow v-if="directorioGuardar.idTipoDirectorio == 2">
                     <VDivider class="my-3" />
                     <VCol cols="12" md="6">
-                      <VTextField v-model="directorioGuardar.comunidad" label="Comunidad" />
+                      <VTextField
+                        v-model="directorioGuardar.comunidad"
+                        label="Comunidad"
+                      />
                     </VCol>
                     <VCol cols="12" md="6">
-                      <VSelect placeholder="Selecione municipio " label="Municipio"
-                        v-model="directorioGuardar.municipio" :items="Municipios" item-title="nombre"
-                        item-value="nombre" @click="getMunicipios()" />
+                      <VSelect
+                        placeholder="Selecione municipio "
+                        label="Municipio"
+                        v-model="directorioGuardar.municipio"
+                        :items="Municipios"
+                        item-title="nombre"
+                        item-value="nombre"
+                        @click="getMunicipios()"
+                      />
                     </VCol>
                     <VCol cols="12" md="6">
-                      <VTextField v-model="directorioGuardar.cargo" label="Cargo"
-                        :rules="[requiredValidator => !!requiredValidator || 'cargo es requerido']" />
+                      <VTextField
+                        v-model="directorioGuardar.cargo"
+                        label="Cargo"
+                        :rules="[
+                          (requiredValidator) =>
+                            !!requiredValidator || 'cargo es requerido',
+                        ]"
+                      />
                     </VCol>
                     <VDivider class="my-3" />
                   </VRow>
@@ -872,43 +1085,88 @@ export default {
                     <VDivider class="my-3" />
                     <VCol cols="12" md="6">
                       <label for="">Cargo</label>
-                      <VTextField style="margin-top: 5px;" v-model="directorioGuardar.cargo" placeholder="Cargo"
-                        :rules="[requiredValidator => !!requiredValidator || 'Cargo es requerido']" />
+                      <VTextField
+                        style="margin-top: 5px"
+                        v-model="directorioGuardar.cargo"
+                        placeholder="Cargo"
+                        :rules="[
+                          (requiredValidator) =>
+                            !!requiredValidator || 'Cargo es requerido',
+                        ]"
+                      />
                     </VCol>
                     <VCol cols="12" md="6">
-                      <AppSelect v-model="directorioGuardar.idDependencia" label="Dependencia"
-                        placeholder="Seleccionar dependencia" :items="dependencias" item-title="nombre" item-value="id"
-                        :rules="[requiredValidator => !!requiredValidator || 'Dependencia es requerido']">
+                      <AppSelect
+                        v-model="directorioGuardar.idDependencia"
+                        label="Dependencia"
+                        placeholder="Seleccionar dependencia"
+                        :items="dependencias"
+                        item-title="nombre"
+                        item-value="id"
+                        :rules="[
+                          (requiredValidator) =>
+                            !!requiredValidator || 'Dependencia es requerido',
+                        ]"
+                      >
                       </AppSelect>
                     </VCol>
                     <VDivider class="my-3" />
                   </VRow>
-
                 </VCol>
 
                 <VCol cols="6" md="6">
-                  <AppSelect v-model="directorioGuardar.idGenero" label="Sexo" placeholder="Seleccionar Sexo"
-                    :items="generos" item-title="descripcion" item-value="id"
-                    :rules="[requiredValidator => !!requiredValidator || 'Genero es requerido']">
+                  <AppSelect
+                    v-model="directorioGuardar.idGenero"
+                    label="Sexo"
+                    placeholder="Seleccionar Sexo"
+                    :items="generos"
+                    item-title="descripcion"
+                    item-value="id"
+                    :rules="[
+                      (requiredValidator) =>
+                        !!requiredValidator || 'Genero es requerido',
+                    ]"
+                  >
                   </AppSelect>
                 </VCol>
                 <VCol cols="6" md="6">
-                  <AppSelect v-model="directorioGuardar.idGama" label="Rango" placeholder="Seleccionar rango"
-                    :items="gamas" item-title="descripcion" item-value="id"
-                    :rules="[requiredValidator => !!requiredValidator || 'Gama es requerido']" />
+                  <AppSelect
+                    v-model="directorioGuardar.idGama"
+                    label="Rango"
+                    placeholder="Seleccionar rango"
+                    :items="gamas"
+                    item-title="descripcion"
+                    item-value="id"
+                    :rules="[
+                      (requiredValidator) =>
+                        !!requiredValidator || 'Gama es requerido',
+                    ]"
+                  />
                 </VCol>
-                <VCol cols="12" md="12" class="d-flex gap-3 ">
+                <VCol cols="12" md="12" class="d-flex gap-3">
                   <VRow>
                     <VCol cols="12" md="6">
-                      <AppSelect :value="+52" v-model="directorioGuardar.Lada" placeholder="Seleccionar lada"
-                        :items="paises" item-title="lada" item-value="lada">
+                      <AppSelect
+                        :value="+52"
+                        v-model="directorioGuardar.Lada"
+                        placeholder="Seleccionar lada"
+                        :items="paises"
+                        item-title="lada"
+                        item-value="lada"
+                      >
                         <template v-slot:selection="{ item }">
                           <v-list-item-content>
                             <v-list-item-title>
                               <div class="d-flex align-center">
-                                <img class="me-2"
-                                  :src="`https://flagcdn.com/w20/${item.raw.codigo ? item.raw.codigo : 'mx'}.png`" />
-                                <span>{{ item.value ? item.value : "+52" }}</span>
+                                <img
+                                  class="me-2"
+                                  :src="`https://flagcdn.com/w20/${
+                                    item.raw.codigo ? item.raw.codigo : 'mx'
+                                  }.png`"
+                                />
+                                <span>{{
+                                  item.value ? item.value : "+52"
+                                }}</span>
                               </div>
                             </v-list-item-title>
                           </v-list-item-content>
@@ -916,17 +1174,23 @@ export default {
                       </AppSelect>
                     </VCol>
                     <VCol cols="12" md="6">
-                      <VTextField v-model="directorioGuardar.numContacto" label="Contacto" :rules="[
-
-
-    ]" />
+                      <VTextField
+                        v-model="directorioGuardar.numContacto"
+                        label="Contacto"
+                        :rules="[]"
+                      />
                     </VCol>
                   </VRow>
                 </VCol>
 
                 <!-- Botones de submit y reset -->
                 <VCol cols="12" class="d-flex justify-end gap-4">
-                  <VBtn color="error" type="reset" variant="outlined" @click="cerrar">
+                  <VBtn
+                    color="error"
+                    type="reset"
+                    variant="outlined"
+                    @click="cerrar"
+                  >
                     Cancelar
                   </VBtn>
                   <VBtn color="success" variant="elevated" type="submit">
@@ -943,13 +1207,19 @@ export default {
     <!-- Diálogo para eliminar directorio -->
     <VDialog v-model="openEliminar" max-width="500px">
       <VCard>
-        <VCardTitle class="d-flex justify-center mt-1 mb-1">¿Deseas eliminar el registro?</VCardTitle>
+        <VCardTitle class="d-flex justify-center mt-1 mb-1"
+          >¿Deseas eliminar el registro?</VCardTitle
+        >
         <VCardActions>
           <VSpacer />
           <VBtn color="error" variant="outlined" @click="cerrarEliminar">
             Cancelar
           </VBtn>
-          <VBtn color="success" variant="elevated" @click="EliminarDirectorio()">
+          <VBtn
+            color="success"
+            variant="elevated"
+            @click="EliminarDirectorio()"
+          >
             Aceptar
           </VBtn>
           <VSpacer />
